@@ -10,4 +10,7 @@ var sendTracking = function(){
     };
     chrome.runtime.sendMessage(null, message);
 };
+if (location.href.match(/^https:\/\/twitter.com\/intent\/tweet\/complete.*$/)) {
+    chrome.runtime.sendMessage(null,{purpose: 'tweetCompleted'});
+}
 setInterval(sendTracking, 1000);

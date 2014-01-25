@@ -37,15 +37,25 @@ var App = {
             top:    track.top   || 0,
             type:   'popup'
         };
-    }
+    },
+    twitterIntentWindowId: null
 }
 chrome.browserAction.onClicked.addListener(function(tab){
     var data = App.getCreateData();
     data.url = Twitter.genURL(tab);
-    chrome.windows.create(data);
+    chrome.windows.create(data,function(win){
+        App.twitterIntentWindowId = win.id;
+    });
 });
 chrome.runtime.onMessage.addListener(function(message,sender){
-    if (localStorage.getItem('rememberPosition')) {
+    if (message.purpose == 'tweetCompleted') {
+        setTimeout(function(){
+            if (! App.twitterIntentWindowId) return;
+            chrome.windows.remove(App.twitterIntentWindowId);
+        },1000);
+    }
+    if (message.purpose == 'track') {
+        if (! localStorage.getItem('rememberPosition')) return;
         localStorage.setItem('track', JSON.stringify(message.data));
     }
 });
