@@ -1,0 +1,11 @@
+#!/bin/sh
+
+build_prod(){
+  rm -rf build/twick
+  mkdir -p build/twick
+  cp -r src build/twick/
+  cp manifest.json build/twick/manifest.json
+  zip -r build/twick.zip build/twick/*
+}
+
+build_prod >> /dev/null

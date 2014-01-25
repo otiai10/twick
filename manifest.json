@@ -1,0 +1,37 @@
+{
+    "manifest_version": 2,
+
+    "name": "twick",
+    "version": "0.0.1",
+
+    "description": "Just wanna tweet current page.",
+    "icons" : {
+        "48"  : "src/img/twick.48.png",
+        "128" : "src/img/twick.128.png"
+    },
+    "permissions" : [
+        "tabs",
+        "storage",
+        "https://twitter.com/intent/*"
+    ],
+    "browser_action": {
+        "default_icon": "src/img/twick.400.png"
+    },
+    "background": {
+        "persistent": true,
+        "scripts": [
+            "src/js/bg.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches" : [
+                "https://twitter.com/intent/*"
+            ],
+            "js" : [
+                "src/js/twitter.js"
+            ]
+        }
+    ],
+    "options_page" : "src/html/options.html"
+}
