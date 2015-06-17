@@ -1,5 +1,5 @@
 var Twitter = {
-    baseURL: 'https://twitter.com/intent/tweet?',
+    baseURL: 'https://twitter.com/intent/tweet?twick=true&',
     genURL: function(tab){
         var parameterString = new Twitter.Params(tab).toString();
         return Twitter.baseURL + parameterString;
