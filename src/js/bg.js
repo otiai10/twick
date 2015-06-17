@@ -5,11 +5,14 @@ var Twitter = {
         return Twitter.baseURL + parameterString;
     }
 };
-var Params = Twitter.Params = function(tab){
+var Params = Twitter.Params = function(tab, selected){
     this._availableKeys = ['url','via','text','in_reply_to','hashtags','related'];
     this.tab = tab;
     this.params = {
-        'text': encodeURIComponent(tab.title),
+        'text': function(tab) {
+            var text = (tab.selectedText) ? '“' + tab.selectedText + '” / ' : '';
+            return encodeURIComponent(text + tab.title);
+        }(tab),
         'url': encodeURIComponent(tab.url),
         'hashtags': App.getHashtags()
     };
@@ -42,9 +45,14 @@ var App = {
 }
 chrome.browserAction.onClicked.addListener(function(tab){
     var data = App.getCreateData();
-    data.url = Twitter.genURL(tab);
-    chrome.windows.create(data,function(win){
-        App.twitterIntentWindowId = win.id;
+    chrome.tabs.executeScript(tab.id, {
+        code: 'window.getSelection().toString();'
+    }, function(text) {
+        tab.selectedText = (text) ? text[0] : '';
+        data.url = Twitter.genURL(tab);
+        chrome.windows.create(data,function(win){
+            App.twitterIntentWindowId = win.id;
+        });
     });
 });
 chrome.runtime.onMessage.addListener(function(message,sender){

@@ -11,6 +11,7 @@
     },
     "permissions" : [
         "tabs",
+        "activeTab",
         "storage",
         "https://twitter.com/intent/*"
     ],
