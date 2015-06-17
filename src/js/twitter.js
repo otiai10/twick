@@ -13,7 +13,10 @@ var sendTracking = function(){
 var moveCursorOnTheTop = function() {
     var area = document.getElementsByTagName('textarea');
     if (!area) return;
-    area[0].setSelectionRange(0, area[0].value.indexOf('” /') + 1);
+    area = area[0];
+    var end = area.value.indexOf('” /'); 
+    end = (end < 0) ? area.selectionEnd : end + 1;
+    area.setSelectionRange(0, end);
 };
 if (location.href.match(/^https:\/\/twitter.com\/intent\/tweet\/complete.*$/)) {
     chrome.runtime.sendMessage(null,{purpose: 'tweetCompleted'});
